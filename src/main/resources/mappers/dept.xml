@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="app.labs.dept.dao.DeptRepository">
+
+	<select id="getDeptCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM DEPT
+		<if test="deptno != null">
+			 WHERE DEPTNO = #{deptno}
+		</if>
+	</select>
+	
+	<select id="getDeptList" resultType="app.labs.dept.model.Dept">
+		SELECT * FROM DEPT
+	</select>
+	
+	<select id="getDeptInfo" parameterType="int" resultType="app.labs.dept.model.Dept">
+		SELECT 	DEPTNO 	AS 	deptNo,
+				DNAME 	AS 	dName,
+				LOC 	AS 	loc
+		FROM DEPT WHERE DEPTNO = #{deptno}
+	</select>
+
+	<update id="updateDept" parameterType="app.labs.dept.model.Dept">
+		UPDATE DEPT 
+		SET DNAME=#{dName}, LOC=#{loc}
+		WHERE DEPTNO = #{deptNo}
+	</update>
+	
+	<insert id="insertDept" parameterType="app.labs.dept.model.Dept">
+		INSERT INTO DEPT ( DEPTNO, DNAME, LOC )
+		VALUES ( #{deptNo}, #{dName}, #{loc} )
+	</insert>
+	
+	<delete id="deleteDept" parameterType="app.labs.dept.model.Dept">
+		DELETE FROM DEPT 
+		WHERE DEPTNO=#{deptno}
+	</delete>
+</mapper>

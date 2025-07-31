@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<style>
+		.text { background-color: yellow;}
+		.large { height: 30px;}
+		.bold { font-weight: bold;}
+		.active { background-color: yeellow;}
+		.deactive { background-color: gray;}
+	</style>
 </head>
 <body>
 	<h1>Thymeleaf</h1>
@@ -93,8 +100,115 @@
 					</li>
 					<li th:with="even=true, status='alert'">
 						<div th:text="${even?'짝수':'홀수'} "></div>
+						<div th:text="${even}?(${status=='alert'?'경고':'정상'}):'홀수'"></div>
+						<div th:text="${even}?(${status=='alert'?:'정상'}):'홀수'"></div>
 					</li>
 				</ol>
+			<h3>4.2 loop</h3>
+				<ul>
+					<li>
+						<span th:each="item : ${list}">[[ ${item} ]],</span>
+					</li>
+					<li>
+						<th:block th:each="item, stat : ${list}">
+						<!-- stat: 행정보 count: 현재 출력된 갯수, size: item size, even, odd: 짝수, 홀수 -->
+							<div th:text="| ${stat.index}, ${stat.count}, ${stat.size}, ${stat.even}, ${stat.odd},
+                			${stat.first}, ${stat.last}, ${stat.current} : ${item} |"></div>
+						</th:block>
+					</li>
+					<li>
+						<div th:with="nums=${#numbers.sequence(1,10)}">
+							<span th:each="i: ${nums}">[[${i }]],</span>
+            			</div>
+					</li>
+					
+				</ul>
+		<h2>5. Form, Attribute</h2>
+			<form action="." method="post" th:object="${user}">
+				<input type="text" id="idx" name="기본값" class="text" th:attrappend="class=' large'" th:classappend="bold" 
+						th:name="*{idx}" th:value="*{idx}"/>
+				<input type="text" th:field="*{userId}" required 
+						th:attr="readonly=true, required=true, placeholder=${msg}"/>
+				<input type="text" th:field="*{userName}" th:data-el="*{userName}"/>
+				<th:block th:if="true">
+					<input type="text" th:class="${false?'active':'deactive'}" th:required="${true}" />
+					<select id="userRole" name="userRole" 
+							th:with="nums=${#numbers.sequence(1,10)}">
+						<option value="">선택해 주세요.</option>
+						<option th:each="num : ${nums}" th:value="${num}" th:text="${num}" th:selected="${num==3}"></option>
+					</select>
+				</th:block>
+				<div>
+					<label><input type="checkbox" th:field="*{userStatus}" th:text="1" th:value="1"></label>
+					<label><input type="checkbox" th:field="*{userStatus}" th:text="2" th:value="2" th:checked="${true}"></label>
+				</div>
+				<div>
+					<label><input type="checkbox" name="agree" th:text="동의함" th:value="Y" th:checked="true"></label>
+				</div>
+				<div>
+            		<label><input type="radio" name="userCheck" id="userCheck1" th:value="1" th:text="yes" th:checked="${a==10}"/></label>
+            		<label><input type="radio" name="userCheck" id="userCheck2" th:value="2" th:text="no" th:checked="${a!=10}"/></label>
+        		</div>
+        		<div>
+        			<button type="submit">제출</button>
+        		</div>
+			</form>
+			
+		<h2>6. Fragment</h2>
+			<ul>
+		 		<li>
+		 			<div th:insert="~{/home/fragment::frag01}" style="background-color:yellow;"></div>
+			 	</li>
+			 	<li>
+			 		<div th:replace="~{/home/fragment::frag01}" style="background-color:yellow;"></div>
+			 	</li>
+			 	<li>
+			 		<div th:insert="/home/fragment::frag01" style="background-color:yellow;"></div>
+			 	</li>
+			 	<li>
+			 		<div th:insert="${false}?~{/home/fragment::frag01}:_" style="background-color:yellow;"></div>
+			 	</li>
+			 	<li>
+			 		<div th:replace="~{/home/fragment::frag02('가', '나')}" style="background-color:yellow;"></div>
+			 	</li>
+			 	<li>
+			 		<div th:replace="~{/home/fragment::frag03(~{:: .msg})}" style="background-color:yellow;"></div> <!-- css selector 매개변수 선??? -->
+			 		<i class="title">Title</i>
+			 		<i class="msg">Message</i>
+			 	</li>
+			</ul>
+		<h2>7. Utility Object</h2>
+		
+			<div th:replace="~{/home/util-object :: utilFragment}"></div>
+			
+		<h2>8. JavaScript</h2>
+		
+			<script>
+				let msg = "[[${session.msg }]]";
+		        let msg2 = "[(${msg })]";
+		        let msg3 = "/*[[${session.msg}]]*/";
+		        let name = "[[${param.name }]]";
+		        let num = [[${a }]];
+		        
+		        /* let user = [[${user }]]; */
+			</script>
+			<script th:inline="javascript">
+			    /* <![CDATA[ */
+			        msg = [[${session.msg }]];
+			        msg2 = "[(${msg })]";
+			        msg3 = /*[[${session.msg}]]*/;
+			        name = [[${param.name }]];
+			        num = [[${a }]];
+			        
+			        let user = [[${user }]];
+			        
+			        console.log(user.userName);
+			        
+			        [# th:each="item, stat: ${list}" #]
+			        var num[[${stat.index}]] = [[${item}]];
+			        [/]
+			    /* ]]> */
+			</script>
 		
 		
 		

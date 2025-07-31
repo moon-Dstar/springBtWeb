@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:fragment="utilFragment">
+	<div>
+     #numbers, #strings, #arrays, #lists, #sets, #maps, #objects, #bools, 
+     #dates, #calendars, #uris, #messages, #conversions, #aggregates, #ids
+     <!-- /* 정수,실수 자리수를 스팩에 맞추어 설정한다. */ -->
+	</div>
+	<h3>#numbers</h3>
+	<ul th:with="val=123456789.1359, val1=12.123, rate=${val1/100}">
+		<li th:text="${#numbers.formatInteger(num, 3)}"></li>
+		<li th:text="${#numbers.formatInteger(val, 3)}"></li>
+		<li th:text="${#numbers.formatInteger(val1, 5)}"></li>
+		<li th:text="${#numbers.formatDecimal(val, 3, 2)}"></li>
+		<li th:text="${#numbers.formatDecimal(val, 0, 5)}"></li>
+		<li th:text="${#numbers.formatDecimal(val, 0,'COMMA', 2,'POINT')}"></li>
+		<li th:text="${#numbers.formatDecimal(val1, 5, 2,'POINT')}"></li>
+		<li th:text="${#numbers.formatCurrency(val)}"></li>
+		<li>[[${#numbers.formatCurrency(val)}]]</li>
+		<li th:with="val2=${rate }" th:text="${#numbers.formatPercent(val2, 0, 1)}"></li>
+		<li><span th:each="i: ${#numbers.sequence(1,10)}">[[${i }]],</span></li>
+		<li><span th:each="i: ${#numbers.sequence(10,1,-1)}">[[${i }]],</span></li>
+	</ul>
+	
+	<h3>#strings</h3>
+	<ul th:with="val='abcde', val1='가,나,다,라,마', val2=null">
+		<li th:text="${#strings.isEmpty(val2)}"></li>
+		<li th:text="${#strings.defaultString(val2, 'hello')}"></li>
+		<li th:text="${#strings.contains(val, 'a')}"></li>
+		<li th:text="${#strings.indexOf(val, 'a')}"></li>
+		<li th:text="${#strings.substring(val1, 1, 3)}"></li>
+		<li th:text="${#strings.replace(val1, ',', ':')}"></li>
+		<li th:text="${#strings.trim(val1)}"></li>
+		<li th:text="${#strings.length(val1)}"></li>
+		<li th:text="${#strings.equals(val, val1)}"></li>
+		<li th:text="${#strings.append(val, val1)}"></li>
+		<li th:with="strs=${#strings.arraySplit(val1, ',')}">
+			<span th:each="str: ${strs }">[[${str }]]-</span><br>
+			<span th:text="${#strings.arrayJoin(strs,'|')}"></span>
+		</li>
+		<li th:text="${#strings.toString(val2)}"></li>
+	</ul>
+	
+	<h3>#dates</h3>
+	<ul th:with="date=${#dates.create('2024', '01', '02', '15', '30', '50')}, date1=${#dates.createNow()}, date2=${#dates.createToday()}">
+		<li th:text="${#dates.format(date)} "></li>
+		<li th:text="${#dates.format(date, 'yyyy-MM-dd HH:mm:ss')} "></li>
+		<li th:text="| ${#dates.day(date1)}, ${#dates.month(date1)}, ${#dates.year(date1)}, ${#dates.dayOfWeek(date1)}, 
+		${#dates.hour(date1)}, ${#dates.minute(date1)}, ${#dates.second(date1)} |"></li>
+	</ul>
+
+</div>
+</body>
+</html>
