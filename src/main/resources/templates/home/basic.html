@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Thymeleaf</h1>
+	
+		<h2>1. EL</h2>
+			<h3>1.1 EL 문법</h3>
+				<ul>
+					<li th:text="${session.msg}"></li> <!-- Session -->
+					<li th:text="${param.name}"></li> <!-- Query Parameter: http://localhost:8088/home/basic?name=%ED%99%8D%EA%B8%B8%EB%8F%99 -->
+					<li th:text="${a}"></li> <!-- Request -->
+					<li th:text="${a + 10}"></li> <!-- Request -->
+					<li th:text="'${1+2 } =' + ${1+2 }"></li>
+					<li th:text="${a > 0 ? 'A' : 'B'}"></li> <!-- Request -->
+				</ul>
+			<h3>1.2 주석</h3>
+				<ul>
+					<li>HTML: <!-- 기본 주석 --> &lt;!-- 기본 주석 --&gt;</li>
+					<li>Thymeleaf: <!--/* 타임리프 주석 - 출력안됨 */-->  &lt;!--/* 타임리프 주석 - 출력안됨 */--&gt; </li>
+					<li>Thymeleaf: <!--/*/ 타임리프 주석 - 실행되면 출력, 실행안되면 주석처리 /*/-->  &lt;!--/*/ 타임리프 주석 - 실행되면 출력, 실행 안되면 주석처리 /*/--&gt;</li>
+				</ul>
+			
+		<h2>2. 표현식</h2>
+			<div>
+		        ${...}:    변수의 값,  *{...}: 선택 변수 표현식, #{...}: 메시지(message.properties, 국제화) 표현식, @{...}: URL 표현식, ~{...}: 조각 표현식
+		    </div>
+		    <h3>${...}, @{...}</h3>
+		    	<ul>
+		    		<li th:text="'메시지는 &quot;<b>' + ${session.msg } + '</b>&quot; 입니다.'"></li> <!-- &quot; = " -->
+		    		<li th:utext="'메시지는 &quot;<b>' + ${session.msg } + '</b>&quot; 입니다.'"></li>
+		    		<li>메시지는 &quot; [[ ${msg} ]] &quot; 입니다.</li>
+		    		<li>메시지는 &quot; [( ${msg} )] &quot; 입니다.</li>
+		    		<li th:utext="|메시지는 &quot;<b>${session.msg }</b>&quot; 입니다.|"></li>
+		    		<li>스프링빈: [[ ${@defaultTemplateBasicService.getMap()['A']} ]]</li>
+		    	</ul>
+		    	
+		    	<ul>
+		    		<li><a th:href="@{/home/basic}">단순url</a></li> <!-- 절대경로 -->
+		    		<li><a th:href="@{/home/basic(name=${user.userName}, id=${user.userId},)}">쿼리파라메터</a></li>
+		    		<li><a th:href="@{/home/basic/{name}/{id}(name=${user.userName}, id=${user.userId})}">경로파라메터</a></li>
+		    		<li><a th:href="@{/home/basic/{id}(name=${user.userName}, id=${user.userId},)}">쿼리파라메터</a></li>
+		    	</ul>
+		    <h3>*{...}</h3>
+		    	<ul th:object="${user}">
+		    		<li th:text="*{userId}"></li>
+		    		<li th:text="*{userName}"></li>
+		    	</ul>
+		<h2>3. Data, 연산자</h2>
+			<ul th:with="val=${str }, val1='Hello', val2=null, val3=''">
+				<li th:text="|str: ${str}, val: ${val}, val1: ${val1}, val2: ${val2}, val3: ${val3}, val4: ${val4} |"></li>
+				<li th:text="|num: ${num} X 2 = ${num * 2} |"></li>
+				<li>
+					<span th:text="1 > 2"></span>,
+					<span th:text="1 == 2"></span>,
+					<span th:text="1 != 2"></span>
+				</li>
+				<li>
+					<div th:text="(3 % 2 == 0)?'짝수':'홀수'"></div>
+				</li>
+				<li>
+					Elvis 연산자:<span th:text="${val1}?:'값 없음'"></span>, 
+					No-Operation:<span th:text="${val1}?:_"></span>
+				</li>
+				<li>
+					Elvis 연산자:<span th:text="${val2}?:'값 없음'"></span>, 
+					No-Operation:<span th:text="${val2}?:_"></span>
+				</li>
+				<li>
+					Elvis 연산자:<span th:text="${val3}?:'값 없음'"></span>, 
+					No-Operation:<span th:text="${val3}?:_"></span>
+				</li>
+			</ul>
+		<h2>4. if, for</h2>
+			<h3>4.1 if</h3>
+				<ol>
+					<li><span th:if="${a > 5}">크다</span>, <span th:if="${a <= 5}">작다</span></li>
+					<li><span th:if="${a > 5}">크다</span>, <span th:unless="${a > 5}">작다</span></li>
+					<li>
+						<th:block>
+							<th:block th:if="${a > 5 and a < 15}">조건 만족</th:block>
+							<th:block th:if="${a <= 5 or a >= 15}">조건 불만족</th:block>
+						</th:block>
+					</li>
+					<li th:with="str='E'" th:switch="${str}">
+						<span th:case="A">90~</span>
+                		<span th:case="B">80~89</span>
+                		<span th:case="C">70~79</span>
+                		<span th:case="*">~69</span>
+					</li>
+					<li th:with="even=true, status='alert'">
+						<div th:text="${even?'짝수':'홀수'} "></div>
+					</li>
+				</ol>
+		
+		
+		
+		
+</body>
+</html>
