@@ -166,7 +166,7 @@
 			 		<div th:insert="/home/fragment::frag01" style="background-color:yellow;"></div>
 			 	</li>
 			 	<li>
-			 		<div th:insert="${false}?~{/home/fragment::frag01}:_" style="background-color:yellow;"></div>
+			 		<div th:replace="${false}?~{/home/fragment::frag01}:_" style="background-color:yellow;"></div>
 			 	</li>
 			 	<li>
 			 		<div th:replace="~{/home/fragment::frag02('가', '나')}" style="background-color:yellow;"></div>

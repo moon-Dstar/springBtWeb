@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/dept/default_layout}">
+
+	<div layout:fragment="content">
+		<h1>부서목록</h1>
+		<table border="1" class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>부서번호</th>
+					<th>부서명</th>
+					<th>위치</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr  th:each="dept : ${deptList}" >
+					<td th:text="${dept.deptNo}"></td>
+					<td th:text="${dept.dName}"></td>
+					<td th:text="${dept.loc}"></td>
+				</tr>
+			</tbody>
+		</table>
+		[[ ${message} ]]
+		<div>
+			<form action="./insert" method="post" id="frmForm">
+				<ul th:object="${dept}">
+					<li><label>부서번호:</label>
+						<input type="number" th:field="*{deptNo}" min="0" max="100" step="10" required>
+					</li>
+					<li><label>부서명:</label>
+						<input type="text" th:field="*{dName}" maxlength="14" required>
+					</li>
+					<li><label>위치:</label>
+						<input type="text" th:field="*{loc}" maxlength="13" required>
+					</li>
+				</ul>
+				<button type="submit" class="btn btn-primary" id="btnNew">신규등록</button>
+				<button type="submit" class="btn btn-warning" id="btnUpdate">수정저장</button>
+       			<button type="submit" class="btn btn-danger" id="btnDelete">삭제</button>
+       			<button type="button" class="btn btn-secondary" id="btnReset">초기화</button>
+			</form>
+		</div>
+		
+		
+		
+	</div>
+	
+	<div layout:fragment="script">
+		<script>
+			// document.getElementById('frmForm'): element object 선택
+			// event: 지정된 함수가 실행될 시점
+			// callback, event handler: event에 의해 실행되는 함수
+			// id가 frmForm인 요소 객체에서 submit 이벤트가 발생되면 함수를 실행하여라.
+		 	$('#frmForm').on('submit', function(e) {
+		 		alert('submit 이벤트가 발생되었습니다.');
+		 		e.preventDefault(); // 이벤트 취소
+		 	}); // jquery: css 선택자 사용 가능
+		 	
+		 	// 마우스포인터가 버튼에 들어가면 '포인터가 들어왔습니다.', 나가면 '포인터가 나갔습니다.''
+		 	$('#btnReset').on('click', function() {
+		 		// console.log('초기화 버튼이 클릭되었습니다.')
+		 		location.href="/dept/list";
+		 	}).on('mouseover', function() {
+		 		console.log('포인터가 들어왔습니다.');
+		 	}).on('mouseout', function() {
+		 		console.log('포인터가 나갔습니다.')
+		 	});
+		
+		</script>
+		
+		
+	</div>
+
+</html>
