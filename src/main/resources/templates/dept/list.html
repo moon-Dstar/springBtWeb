@@ -16,7 +16,7 @@
 			<tbody>
 				<tr  th:each="dept : ${deptList}" >
 					<td th:text="${dept.deptNo}"></td>
-					<td th:text="${dept.dName}"></td>
+					<td><a th:text="${dept.dName}" th:href="@{/dept/list/{id}(id=${dept.deptNo},)}"></a></td>
 					<td th:text="${dept.loc}"></td>
 				</tr>
 			</tbody>
@@ -53,8 +53,23 @@
 			// callback, event handler: event에 의해 실행되는 함수
 			// id가 frmForm인 요소 객체에서 submit 이벤트가 발생되면 함수를 실행하여라.
 		 	$('#frmForm').on('submit', function(e) {
-		 		alert('submit 이벤트가 발생되었습니다.');
-		 		e.preventDefault(); // 이벤트 취소
+		 		// alert('submit 이벤트가 발생되었습니다.');
+		 		e.preventDefault(); // 이벤트 진행 중단
+		 		
+		 		// 자바스크립트 객체 표기법
+		 		const url = {
+		 				'btnNew':'/dept/insert',
+		 				'btnUpdate':'/dept/update',
+		 				'btnDelete':'/dept/delete',	
+		 		};
+		 		
+		 		console.log(url['btnUpdate'], url.btnDelete);
+		 		
+		 		const btn = event.submitter.id;
+		 		console.log(btn, url[btn])
+		 		
+		 		// this = frmform
+		 		$(this).attr({'action':url[btn]}).unbind('submit').submit();
 		 	}); // jquery: css 선택자 사용 가능
 		 	
 		 	// 마우스포인터가 버튼에 들어가면 '포인터가 들어왔습니다.', 나가면 '포인터가 나갔습니다.''

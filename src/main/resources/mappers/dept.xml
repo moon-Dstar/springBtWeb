@@ -11,7 +11,7 @@
 	</select>
 	
 	<select id="getDeptList" resultType="app.labs.dept.model.Dept">
-		SELECT * FROM DEPT
+		SELECT * FROM DEPT ORDER BY DEPTNO ASC
 	</select>
 	
 	<select id="getDeptInfo" parameterType="int" resultType="app.labs.dept.model.Dept">
